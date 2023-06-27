@@ -107,21 +107,22 @@ class Bomb:
         self.rct.move_ip(self.vx, self.vy)
         screen.blit(self.img, self.rct)
 
+
 class Beam:
     """
-    こうかとんのビームに関するクラス
+    こうかとんが放つビームに関するクラス
     """
-    def __init__(self, bird:Bird):
+    def __init__(self, bird: Bird):
         """
-        引数に基づきビームsurfaceを生成する
-        引数 niam:ビームを打つこうかとん
+        引数に基づきビームSurfaceを生成する
+        引数 bird：ビームを放つこうかとん
         """
-        self.img = pg.transform.rotozoom(pg.image.load(f"ex03/fig/beam.png"), 0, 2)
+        self.img = pg.transform.rotozoom(pg.image.load(f"ex03/fig/beam.png"), 0, 2.0)
         self.rct = self.img.get_rect()
         self.rct.left = bird.rct.right
         self.rct.centery = bird.rct.centery
         self.vx, self.vy = +5, 0
-
+    
     def update(self, screen: pg.Surface):
         """
         ビームを速度ベクトルself.vx, self.vyに基づき移動させる
@@ -142,31 +143,31 @@ def main():
     clock = pg.time.Clock()
     tmr = 0
     while True:
-        for event in pg.event.get(): #キーボードなどのイベント
+        for event in pg.event.get():
             if event.type == pg.QUIT:
                 return
-            if event.type == pg.KEYDOWN and event.key == pg.K_SPACE: 
-                beam = Beam(bird) #ビームクラスのインスタンスを生成
+            if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
+                beam = Beam(bird)  # ビームクラスのインスタンスを生成する
                 
-
         screen.blit(bg_img, [0, 0])
         
         if bomb is not None:
             if bird.rct.colliderect(bomb.rct):
-            # ゲームオーバー時に，こうかとん画像を切り替え，1秒間表示させる
+                # ゲームオーバー時に，こうかとん画像を切り替え，1秒間表示させる
                 bird.change_img(8, screen)
                 pg.display.update()
                 time.sleep(1)
                 return
-
-        if beam is None and bomb is not None: #衝突
-            if bomb.rct.colliderect(beam):
+        
+        if beam is not None and bomb is not None:
+            if bomb.rct.colliderect(beam.rct):
                 bomb = None
                 beam = None
 
         key_lst = pg.key.get_pressed()
         bird.update(key_lst, screen)
-        bomb.update(screen)
+        if bomb is not None:
+            bomb.update(screen)
         if beam is not None:
             beam.update(screen)
         pg.display.update()
