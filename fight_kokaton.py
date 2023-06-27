@@ -23,6 +23,7 @@ def check_bound(obj_rct: pg.Rect) -> tuple[bool, bool]:
         tate = False
     return yoko, tate
 
+
 class Score:
     def __init__(self):
         """
@@ -38,6 +39,7 @@ class Score:
     def update(self, screen: pg.Surface):
         self.img = self.font.render(f"score : {self.score}", 0, self.color)
         screen.blit(self.img, self.rct)
+
 
 class Bird:
     """
