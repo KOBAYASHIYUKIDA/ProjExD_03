@@ -5,8 +5,8 @@ import time
 import pygame as pg
 
 
-WIDTH = 1600  # ゲームウィンドウの幅
-HEIGHT = 900  # ゲームウィンドウの高さ
+WIDTH = 1200  # ゲームウィンドウの幅
+HEIGHT = 600  # ゲームウィンドウの高さ
 NUM_OF_BOMBS = 5  # 爆弾の数
 
 
@@ -33,7 +33,7 @@ class Score:
         self.score = 0
         self.img = self.font.render(f"score : {self.score}", 0, self.color)
         self.rct = self.img.get_rect()
-        self.rct.center = 100, HEIGHT-850
+        self.rct.center = 100, HEIGHT-50
 
     def update(self, screen: pg.Surface):
         self.img = self.font.render(f"score : {self.score}", 0, self.color)
@@ -163,6 +163,7 @@ def main():
     # bomb = Bomb((255, 0, 0), 10)
     bombs = [Bomb((255, 0, 0), 10) for _ in range(NUM_OF_BOMBS)]
     beam = None
+    score = Score()
 
     clock = pg.time.Clock()
     tmr = 0
@@ -188,7 +189,7 @@ def main():
                     bombs[i] = None
                     beam = None
                     bird.change_img(6, screen)
-                    pg.display.update()              
+                    score.score += 1              
 
         key_lst = pg.key.get_pressed()
         bird.update(key_lst, screen)
@@ -197,6 +198,8 @@ def main():
             bomb.update(screen)
         if beam is not None:
             beam.update(screen)
+            pg.display.update()
+        score.update(screen)
         pg.display.update()
         tmr += 1
         clock.tick(50)
