@@ -23,6 +23,21 @@ def check_bound(obj_rct: pg.Rect) -> tuple[bool, bool]:
         tate = False
     return yoko, tate
 
+class Score:
+    def __init__(self):
+        """
+        スコア表示
+        """
+        self.color = (0, 0, 255)
+        self.font = pg.font.SysFont("hgp創英角ﾎﾟｯﾌﾟ体", 30)
+        self.score = 0
+        self.img = self.font.render(f"score : {self.score}", 0, self.color)
+        self.rct = self.img.get_rect()
+        self.rct.center = 100, HEIGHT-850
+
+    def update(self, screen: pg.Surface):
+        self.img = self.font.render(f"score : {self.score}", 0, self.color)
+        screen.blit(self.img, self.rct)
 
 class Bird:
     """
@@ -159,7 +174,6 @@ def main():
                 beam = Beam(bird)  # ビームクラスのインスタンスを生成する
                 
         screen.blit(bg_img, [0, 0])
-        
         for bomb in bombs:
             if bird.rct.colliderect(bomb.rct):
                 # ゲームオーバー時に，こうかとん画像を切り替え，1秒間表示させる
